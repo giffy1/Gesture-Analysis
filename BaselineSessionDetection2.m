@@ -16,8 +16,8 @@
     TRAINING_DIRECTORY = 'motion-data-train';
     TEST_DIRECTORY = 'motion-data-train';
     
-    TRAINING_FILE_INDEX = [1 2 3 4];
-    TEST_FILE_INDEX = 5;
+    TRAINING_FILE_INDEX = [1 2 5 4];
+    TEST_FILE_INDEX = 3;
     
     %file extension
     EXTENSION = '*.csv';

@@ -1,7 +1,7 @@
 function [ smoothed_data ] = EWMA( data, alpha )
 %EWMA Smooth dataset with exponentially-weighted moving average
 %   data is that need be smoothed and alpha is the parameter which
-%   defines how much weight is given to previous samples
+%   defines how much weight is given to previous samples.
 
 [n,d] = size(data);
 
