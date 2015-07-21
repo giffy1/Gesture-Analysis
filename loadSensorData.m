@@ -29,8 +29,6 @@ function [ accelData, gyroData ] = loadSensorData( dataDir, ext, filter )
     
     accelData = zeros(0, 4);
     gyroData = zeros(0, 4);
-    accelIndex = 1;
-    gyroIndex = 1;
     
     %% -------- LOAD DATA FROM MULTIPLE FILES -------- %%
 

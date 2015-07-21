@@ -11,7 +11,7 @@
 %% -------- GLOBAL VARIABLES -------- %%
 
     %file name
-    DIRECTORY = 'motion-data';
+    DIRECTORY = 'motion-data-train';
     
     %file extension
     EXTENSION = '*.csv';
@@ -21,6 +21,8 @@
     
     %color which is reserved for signals with no labelled gestures
     NO_ACTIVITY_COLOR = [0.5 0.5 0.5];
+    
+    interval = 15*10^6;
     
     %% -------- LOAD DATA -------- %%
     
@@ -42,25 +44,17 @@
     sessionEnd = sessionEnd - SHIFT;
     
     %% -------- PRE-PROCESSING -------- %
-    disp('Preprocessing data...');
-    tic
-    accelInterval = 20*10^6;
-    resampledAccelData = linearInterpolate(accelData, accelInterval);
-    preprocessedAccelData = EWMA(resampledAccelData, 0.05);
     
-    gyroInterval = 12*10^6;
-    resampledGyroData = linearInterpolate(gyroData, gyroInterval);
-    preprocessedGyroData = EWMA(resampledGyroData, 0.05);
-    toc
+    preprocessedData = preprocessData(accelData, gyroData, interval, 0.05);
     
     %% -------- PLOT SESSION-LABELLED DATA -------- %%
     
     disp('Plotting session-labelled accelerometer data...');
     tic
-    plotData(preprocessedAccelData, sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Accelerometer');
+    plotData(preprocessedData(:,1:4), sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Accelerometer');
     toc
     
     disp('Plotting session-labelled gyroscope data...');
     tic
-    plotData(preprocessedGyroData, sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Gyroscope');
+    plotData(preprocessedData(:,[1,5:end]), sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Gyroscope');
     toc
