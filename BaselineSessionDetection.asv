@@ -1,9 +1,10 @@
 % BASELINESESSIONDETECTION: Baseline eating detection algorithm using a
+<<<<<<< HEAD
 % sliding window approach and a Random Forest classifier to detect
 % infividual eating/drinking gestures, and a clustering approach to
 % make session-level predictions.
 %
-%   See also EXTRACTFEATURESOVERWINDOWS
+%   See also COMPUTEFEATURES, EXTRACTFEATURESOVERWINDOWS, PREPROCESSDATA
 
 %TODO: The overlap threshold should not be in terms of how much of the
 %ground truth is covered by the window, but how much of the window is
@@ -13,13 +14,32 @@
 %the confounding part is the hand-to-mouth/face movement, so it mgiht still
 %work as is...?
 
+=======
+% sliding window approach and a Random Forest classifier and clustering 
+% to detect sessions from gesture density using kernel density estimation
+
+
+%TODO: The overlap threshold should not be in terms of how much of the
+%ground truth is covered by the window, but how much of the window is
+%covered by the ground truth. This will be helpful when adding gesture
+%training data for confounding actions like brushing teeth and talking on
+%the phone, where the gestures may just be the entire session itself. BUT
+%the confounding part is the hand-to-mouth/face movement, so it mgiht still
+%work as is...?
+
+>>>>>>> c39212755f88476f8bdd4d858236e061cd084a99
     %% -------- GLOBAL VARIABLES -------- %%
 
     TRAINING_DIRECTORY = 'motion-data-train';
     TEST_DIRECTORY = 'motion-data-train';
     
+<<<<<<< HEAD
     TRAINING_FILE_INDEX = [5 2 3 4];
     TEST_FILE_INDEX = 1;
+=======
+    TRAINING_FILE_INDEX = [1 2 5 4];
+    TEST_FILE_INDEX = 3;
+>>>>>>> c39212755f88476f8bdd4d858236e061cd084a99
     
     %file extension
     EXTENSION = '*.csv';
@@ -31,6 +51,7 @@
     NO_ACTIVITY_COLOR = [0.5 0.5 0.5];
     
     interval = 20*10^6;
+<<<<<<< HEAD
     
     %% -------- FEATURE EXTRACTION PARAMETERS -------- %%
     
@@ -48,6 +69,25 @@
     X = zeros(36,0);
     Y = zeros(0,1);
     
+=======
+    
+    %% -------- FEATURE EXTRACTION PARAMETERS -------- %%
+    
+    windowSize = 5.8*10^9;
+    stepSize = 1*10^9;
+    overlap_threshold = 0.75;
+    featureFunction = @computeFeatures;
+    nFeatures = 36;
+    
+    %% -------- LOAD DATA -------- %%
+    
+    dataDir = fullfile('..',TRAINING_DIRECTORY);
+    
+    %empty to start:
+    X = zeros(36,0);
+    Y = zeros(0,1);
+    
+>>>>>>> c39212755f88476f8bdd4d858236e061cd084a99
     for i=TRAINING_FILE_INDEX, %TODO don't hardcode 3
         [accelData, gyroData] = loadSensorData(dataDir, EXTENSION, i);
 
@@ -107,6 +147,7 @@
     %BEST RANDOM FOREST EXPLANATION EVER READ: 
     %http://stackoverflow.com/questions/18541923/what-is-out-of-bag-error-in-random-forests
     %in particular about the out-of-bag error
+<<<<<<< HEAD
     B = TreeBagger(nTrees, X', Y, 'OOBPred', 'On'); %, 'Cost', costMatrix);
     disp('Plotting classification error...');
     oobErrorBaggedEnsemble = oobError(B);
@@ -152,6 +193,9 @@
     %% -------- CLUSTER GESTURES & PLOT RESULTS -------- %%
     
     [~, colorSet] = plotData(preprocessedTestData(:,5:end), sessionStart, sessionEnd, sessionLabels, NO_ACTIVITY_COLOR, AxesConstants.X, 'SameScale', 'Pre-processed Accelerometer Signal');
+    
+    %% -------- CLUSTER GESTURES & PLOT RESULTS -------- %%
+    
     hold on
     
     for i=1:length(uniqueLabels),
@@ -168,4 +212,3 @@
         end
     end
     hold off
-    

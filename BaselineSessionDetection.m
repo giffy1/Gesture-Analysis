@@ -18,8 +18,8 @@
     TRAINING_DIRECTORY = 'motion-data-train';
     TEST_DIRECTORY = 'motion-data-train';
     
-    TRAINING_FILE_INDEX = [5 2 3 4];
-    TEST_FILE_INDEX = 1;
+    TRAINING_FILE_INDEX = [1 2 5 4];
+    TEST_FILE_INDEX = 3;
     
     %file extension
     EXTENSION = '*.csv';
@@ -152,6 +152,9 @@
     %% -------- CLUSTER GESTURES & PLOT RESULTS -------- %%
     
     [~, colorSet] = plotData(preprocessedTestData(:,5:end), sessionStart, sessionEnd, sessionLabels, NO_ACTIVITY_COLOR, AxesConstants.X, 'SameScale', 'Pre-processed Accelerometer Signal');
+    
+    %% -------- CLUSTER GESTURES & PLOT RESULTS -------- %%
+    
     hold on
     
     for i=1:length(uniqueLabels),
@@ -168,4 +171,3 @@
         end
     end
     hold off
-    
