@@ -1,20 +1,26 @@
 function [ S, E, labels ] = loadSessionLabels( dataDir, ext, filter )
 %LOADSESSIONLABELS Loads the session labels of the gesture stream
-%   dataDir specifies in which directory the data files are located,
-%   and ext indicates the extension of the files. The extension must be
-%   a valid Excel file extension (works with xlsread()). The file must
-%   start with "REPORT", all text following that identifier is safely
-%   ignored. The first column must contain the timestamps and the second
-%   column must contain the label. The third column should contain "before"
-%   or "after"; however, this is not necessary since the third column is
-%   cimply ignored for now (though it could later be used as a validation
-%   for sound label sequences). loadSessionLabels returns the start and end
-%   times of the session labels and the text that identifies each label.
-%   Thus, S and E should be vectors of order M and labels should be a cell
-%   array of length M, where M is the number of labelled sessions. The
-%   filter is an array that specifies which files are of interest, by the
-%   value which follows the identifier. This is a vector of arbitrary
-%   length. If empty, then all files will be examined.
+%
+%   dataDir: specifies in which directory the data files are located
+%   ext: indicates the extension of the files. The extension must be
+%   a valid Excel file extension (works with xlsread()).
+%
+%   filter: an array that indicates which files are of interest,
+%   identifying these files by an index. If empty, then all files will 
+%   be examined.
+%
+%   The file must start with "REPORT" and should be followed by an index. 
+%   The first column must contain the timestamps and the second column must 
+%   contain the label. The third column should contain  "before" or "after"; 
+%   however, this is not necessary since the third column is simply ignored 
+%   for now (though it could later be used as a validation for sound label 
+%   sequences).
+%
+%   The function returns the start and end times, S and E respectively, and
+%   the labels of each session. S and E are vectors of order M and labels 
+%   is a cell array of length M.
+%
+%   See also LOADGESTURELABELS, LOADSENSORDATA
 
     regex = fullfile(dataDir, ext);
     

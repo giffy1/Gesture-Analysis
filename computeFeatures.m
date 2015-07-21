@@ -1,6 +1,17 @@
 function [ features ] = computeFeatures( window )
-%COMPUTEFEATURES Summary of this function goes here
-%   Detailed explanation goes here
+%COMPUTEFEATURES Computes features over the window, intended for
+%classifying eating/drinking gestures primarily.
+%
+%   Unlike computeStatisticalFeatures(), this method assumes that the
+%   window contains 3-axis accelerometer data in the first three columns
+%   and 3-axis gyroscope data in the remaining columns.
+%
+%   For both sensors, it integrates the raw readings to compute the linear
+%   position and angular rotation approximations relative to the first 
+%   sample in the window. Features over this stream include the number of
+%   peaks and troughs, the maximum linear position/angular rotation, the
+%   average, max and median of the raw data up to that maximum and the
+%   minimum relative position/rotation.
 
         deltaT = .2; %TODO pass this in... is it even needed??
         %ACCELEROMETER FEATURES

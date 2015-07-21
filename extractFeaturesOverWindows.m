@@ -1,28 +1,38 @@
 function [ x, y ] = extractFeaturesOverWindows(timeSeriesData, windowDuration, windowStep, featureFunction, nFeatures, overlap_threshold, S, E, labels, otherLabel)
-%EXTRACTFEATURES Extract features over a sliding window over the
-%time-series data
-%   The data provided must be time-series data, where the first column
-%   represents the timestamp and the remaining columns represent the data
-%   values. It is good practice to first interpolate the data so that the
-%   timestamps are equally spaced. The sliding window is defined by the
-%   windowDuration and windowStep parameters. The windowDuration is length
-%   of the window in nanoseconds. This means the number of samples may
-%   vary. The windowStep parameter defines how much the window slides, and
-%   is also given in nanoseconds. The featureFunction defines how features
-%   will be computed. This is a handle to another function. The number of
-%   features must also be specified, but if this is not known, it can be
-%   set to 0. The remaining features are optional: They may be provided if
-%   the user wishes to train a classifier and therefore must label these
-%   labels accordingly. The S and E parameters define the start and end
-%   times in nanoseconds of the gestures/activities of interest and the
-%   labels parameter is a cell array providing the nominal classes
-%   corresponding to these intervals. Any window that contains at least
-%   overlap_threshold percentage of the ground truth activity will be
-%   labelled with that activity; otherwise, it will be labelled as 'other'
-%   or 'none, etc.' (whatever is specified by the otherLabel parameter). If
-%   the user decides not to provide these parameters, then y will be full
-%   of zeros and should not be used! Leaving out ANY parameter will
-%   indicate that the windows are not used for training.
+%EXTRACTFEATURES Extract features over a sliding window over time-series data
+%
+%   timeSeriesData: dataset where the first column specifies some temporal
+%   markers (timestamps) and the remaining columns are data readings (i.e.
+%   accelerometer, gyroscope)
+%
+%   windowDuration: the size of the sliding window in nanoseconds
+%   windowStep: the shift of the window in nanoseconds
+%
+%   featureFunction: a handle to a function that computes features over a
+%   window of the specified time-series data
+%   nFeatures: the size of the feature vector returned by the feature
+%   function
+%
+%   OPTIONAL:
+%
+%   overlap_threshold: the minimum percentage of overlap, between 0 and 1,
+%   of the window and the ground truth gesture, for the window to be given
+%   the label corresponding to that gesture.
+%
+%   S: the start times of the gestures
+%   E: the end times of the gestures
+%   labels: the textual labels corresponding to the gestures
+%   other_label: a string reserved for windows where no labelled gesture is
+%   present, usually 'other'
+%
+%   The function returns the feature matrix X and the label vector Y, which
+%   can be used for training a classifier. Alternatively, if the optional
+%   parameters regarding ground-truth labels are omitted, then ONLY X will
+%   be computed, which will allow the user to make predictions using an
+%   existing trained classifier.
+%
+%   See also COMPUTEFEATURES, COMPUTESTATISTICALFEATURES, 
+%   COMPUTECOMBINEDFEATURES
 
     disp('Extracting features over windows...');
     tic

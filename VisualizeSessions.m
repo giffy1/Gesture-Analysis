@@ -1,6 +1,12 @@
-% VISUALIZESESSIONS: This script plots the motion data stream and 
-% color-codes the signals corresponding to each labelled gesture. It 
-% will display all axes, unless otherwise
+% VISUALIZESESSIONS: This script plots the labelled motion data stream, 
+% such that each labelled session is given a unique distinguishable color.
+% The data is loaded from the ACCEL.csv and GYRO.csv files and the session
+% labels are loaded from the REPORT.csv file, located in the motion-data 
+% directory. The data is resampled and processed using an exponentially 
+% weighted moving average.
+%
+% See also VISUALIZEGESTURES, PLOTDATA, DISTINGUISHABLE_COLORS,
+% LOADSENSORDATA, LOADSESSIONLABELS, PREPROCESSDATA
 
 %% -------- GLOBAL VARIABLES -------- %%
 
@@ -51,10 +57,10 @@
     
     disp('Plotting session-labelled accelerometer data...');
     tic
-    plotSessionData(preprocessedAccelData, sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Accelerometer');
+    plotData(preprocessedAccelData, sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Accelerometer');
     toc
     
     disp('Plotting session-labelled gyroscope data...');
     tic
-    plotSessionData(preprocessedGyroData, sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Gyroscope');
+    plotData(preprocessedGyroData, sessionStart, sessionEnd, labels, NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Gyroscope');
     toc

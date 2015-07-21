@@ -1,17 +1,23 @@
 function [ accelData, gyroData ] = loadSensorData( dataDir, ext, filter )
 %LOADSENSORDATA Loads raw accel/gyro data stream
-%   dataDir specifies in which directory the data files are located,
-%   and ext indicates the extension of the files. Currently, the extension
-%   must be ".csv" to work with csvread(). The accelerometer file must
-%   begin with the word "ACCEL" and the gyroscope file must begin with the
-%   word "GYRO". All text following these identifiers will be safely
-%   ignored. The function returns two matrices with the requested data:
+%   
+%   dataDir: specifies in which directory the data files are located,
+%   ext: indicates the extension of the files. Currently, the extension
+%   must be ".csv" to work with csvread().
+%
+%   filter: an array of indeces indicating which files are of interest. If
+%   empty, then all files will be loaded.
+%   
+%   The accelerometer file must begin with the word "ACCEL" and the 
+%   gyroscope file must begin with the word "GYRO". Following this 
+%   identifier should be an index to identify the dataset.
+%   
+%   The function returns two matrices with the requested data:
 %   accelData is an Nx4 double-precision matrix containing the timestamps
-%   and the x-,y-,z- accelerometer data. gyroData is also an Nx4 matrix
-%   with analogous information. Also the filter parameter indicates
-%   which file(s) are of interest, by the value which follows the 
-%   identifier. This is a vector of arbitrary length. If empty, then all
-%   files will be examined.
+%   and the x-,y-,z- accelerometer data.
+%   gyroData is also an Nx4 matrix with analogous information.
+%
+%   See also LOADSESSIONLABELS, LOADGESTURELABELS
 
     regex = fullfile(dataDir, ext);
     

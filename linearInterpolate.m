@@ -1,12 +1,15 @@
 function [resampled_data] = linearInterpolate(data, interval)
 %LINEARINTERPOLATE linearly interpolates the provided data matrix along its
-%rows, contingent on the first column
-%   data is an Nx(D+1) matrix where D is the dimension of the data and the
+%rows, contingent on the first column (assuemd to be time-series)
+%   data: Nx(D+1) matrix where D is the dimension of the data and the
 %   first column defines a sequential ordering of the data (i.e.
-%   time-domain). The data will be resampled based on the first column. The
-%   interval specifies the new sampling rate. The method returns a Mx(D+1)
-%   matrix where M is the number of samples after re-sampling. NOTE: This
-%   assumes that the data starts at 0
+%   time-domain). The data will be resampled based on the first column.
+%
+%   interval: specifies the new sampling rate. The method returns a Mx(D+1)
+%   matrix where M is the number of samples after re-sampling.
+%
+%   NOTE: This assumes that the time-series data starts at t=0. If this is
+%   not the case, shift the data prior to interpolating.
 
 [n,d] = size(data);
 

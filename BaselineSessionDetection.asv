@@ -3,7 +3,7 @@
 % infividual eating/drinking gestures, and a clustering approach to
 % make session-level predictions.
 %
-%   See also COMPUTEFEATURES, EXTRACTFEATURESOVERWINDOWS, PREPROCESSDATA
+%   See also EXTRACTFEATURESOVERWINDOWS
 
 %TODO: The overlap threshold should not be in terms of how much of the
 %ground truth is covered by the window, but how much of the window is

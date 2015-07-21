@@ -1,6 +1,8 @@
 function [ features ] = computeStatisticalFeatures( window )
-%COMPUTEFEATURES Summary of this function goes here
-%   Detailed explanation goes here
+%COMPUTESTATISTICALFEATURES Computes statistical features over a window of data
+%   The feature vector is a 5*K dimensional vector containing the mean,
+%   standard deviation, skewness, kurtosis and root mean square for each of
+%   the K axes.
 
         windowMean = mean(window,1);
         windowStd = std(window,1);

@@ -1,6 +1,13 @@
-% VISUALIZEGESTURES: This script plots the motion data stream and 
-% color-codes the signals corresponding to each labelled gesture. It 
-% will display all axes, unless otherwise
+% VISUALIZEGESTURES: This script plots the labelled motion data stream, 
+% such that each labelled gesture is given a unique distinguishable color.
+% The data is loaded from the ACCEL.csv and GYRO.csv files and the session
+% labels are loaded from the REPORT.csv file, located in the motion-data
+% directory. The gesture labels are loaded from a labels.txt file, located
+% in the same directory. The data is resampled and processed using an 
+% exponentially weighted moving average.
+%
+% See also VISUALIZESESSIONS, PLOTDATA, DISTINGUISHABLE_COLORS,
+% LOADSENSORDATA, LOADSESSIONLABELS, PREPROCESSDATA
 
 %% -------- GLOBAL VARIABLES -------- %%
 
@@ -63,5 +70,5 @@
     
     %% -------- PLOT DATA -------- %%
     
-    plotSessionData(preprocessedData(:,1:4), S, E, cellstr(gestureLabels), NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Pre-processed Accelerometer Signal');
-    plotSessionData(preprocessedData(:,[1,5:end]), S, E, cellstr(gestureLabels), NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Pre-processed Gyroscope Signal');
+    plotData(preprocessedData(:,1:4), S, E, cellstr(gestureLabels), NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Pre-processed Accelerometer Signal');
+    plotData(preprocessedData(:,[1,5:end]), S, E, cellstr(gestureLabels), NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Pre-processed Gyroscope Signal');
