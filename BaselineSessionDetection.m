@@ -34,7 +34,7 @@
     
     %% -------- FEATURE EXTRACTION PARAMETERS -------- %%
     
-    windowSize = 5.8*10^9;
+    windowSize = (4*10^9:10^9:6*10^9);
     stepSize = 1*10^9;
     overlap_threshold = 0.75;
     featureFunction = @computeFeatures;
@@ -89,7 +89,7 @@
 
         %% -------- EXTRACT FEATURES OVER WINDOWS -------- %%
 
-        [x, y] = extractFeaturesOverWindows(preprocessedData, windowSize, stepSize, ... 
+        [x, y] = extractFeaturesOverMultiscaleWindows(preprocessedData, windowSize, stepSize, ... 
             featureFunction, nFeatures, overlap_threshold, S, E, gestureLabels, 'other');
         
         X = [X x];
@@ -142,7 +142,7 @@
     
     %% -------- EXTRACT FEATURES OVER WINDOWS -------- %%
 
-    [xTest, ~] = extractFeaturesOverWindows(preprocessedTestData, windowSize, stepSize, featureFunction, nFeatures);
+    [xTest, ~] = extractFeaturesOverMultiscaleWindows(preprocessedTestData, windowSize, stepSize, featureFunction, nFeatures);
     
     %% -------- PREDICT GESTURES -------- %%
     
@@ -151,7 +151,7 @@
     
     %% -------- CLUSTER GESTURES & PLOT RESULTS -------- %%
     
-    [~, colorSet] = plotData(preprocessedTestData(:,5:end), sessionStart, sessionEnd, sessionLabels, NO_ACTIVITY_COLOR, AxesConstants.X, 'SameScale', 'Pre-processed Accelerometer Signal');
+    [~, colorSet] = plotData(preprocessedTestData(:,[1,5:end]), sessionStart, sessionEnd, sessionLabels, NO_ACTIVITY_COLOR, AxesConstants.X, 'SameScale', 'Pre-processed Gyroscope Signal');
     
     %% -------- CLUSTER GESTURES & PLOT RESULTS -------- %%
     

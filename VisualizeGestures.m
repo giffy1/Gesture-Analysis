@@ -24,7 +24,7 @@
     NO_ACTIVITY_COLOR = [0.5 0.5 0.5];
     
     %indicates which data set we are interested in
-    DATA_INDEX = 5;
+    DATA_INDEX = 3;
     
     interval = 15*10^6;
     

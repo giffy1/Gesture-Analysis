@@ -1,5 +1,5 @@
-function [ x, y ] = extractFeaturesOverWindows(timeSeriesData, windowDuration, windowStep, featureFunction, nFeatures, overlap_threshold, S, E, labels, otherLabel)
-%EXTRACTFEATURESOVERWINDOWS Extract features over a sliding window over time-series data
+function [ X, Y ] = extractFeaturesOverMultiscaleWindows(timeSeriesData, windowDuration, windowStep, featureFunction, nFeatures, overlap_threshold, S, E, labels, otherLabel)
+%EXTRACTFEATURESOVERMULTISCALEWINDOWS Extract features over a sliding window over time-series data
 %
 %   timeSeriesData: dataset where the first column specifies some temporal
 %   markers (timestamps) and the remaining columns are data readings (i.e.
@@ -38,47 +38,51 @@ function [ x, y ] = extractFeaturesOverWindows(timeSeriesData, windowDuration, w
     tic
 
     startTime = 0;
-    endTime = startTime + windowDuration;
+    endTime = windowDuration + startTime;
     upperBound = timeSeriesData(end,1);
     
-    nWindows = ceil((upperBound - windowDuration)/windowStep);
-    x = zeros(nFeatures, nWindows);
-    y = cell(nWindows, 1);
+    nWindows = ceil((upperBound - max(windowDuration))/windowStep);
+    X = zeros(nFeatures, nWindows);
+    Y = cell(nWindows, 1);
     
     windowIndex = 1;
     
-    while endTime < upperBound,
-        
-        window = timeSeriesData(timeSeriesData(:,1) >= startTime ... 
-            & timeSeriesData(:,1) <= endTime, 2:end);
-        
-        %extract basic features to start:
-        
-        x(:,windowIndex) = featureFunction(window);
-        
+    while windowIndex <= nWindows
         if nargin == 10,
             %find closest matching start time
             diffS = abs(S-startTime);
             [~, minIdx] = min(diffS);
-
-            %label window if it contains most of the gesture
+            
             labelStart = S(minIdx);
             labelEnd = E(minIdx);
-            overlap = (min(labelEnd, endTime) - max(labelStart, startTime)) / (labelEnd - labelStart);
-            if overlap < 0, overlap = 0; end
-            if overlap >= overlap_threshold
-                y{windowIndex} = labels{minIdx};
-            else
-                y{windowIndex} = otherLabel;
+            
+            isGesture = false;
+        end
+        for j = 1:length(windowDuration),
+            window = timeSeriesData(timeSeriesData(:,1) >= startTime ... 
+                & timeSeriesData(:,1) <= endTime(j), 2:end);
+
+            %extract basic features to start:
+
+            X(:,windowIndex) = featureFunction(window);
+
+            if nargin == 10 && isGesture == false,
+                overlap = (min(labelEnd, endTime(j)) - max(labelStart, startTime)) / (labelEnd - labelStart);
+                if overlap < 0, overlap = 0; end
+                if overlap >= overlap_threshold
+                    isGesture = true;
+                    Y{windowIndex} = labels{minIdx};
+                else
+                    Y{windowIndex} = otherLabel;
+                end
             end
         end
         
         %update window:
         startTime = startTime + windowStep;
-        endTime = startTime + windowDuration;
+        endTime = windowDuration + startTime;
         windowIndex = windowIndex + 1;
     end
-
     toc
 end
 

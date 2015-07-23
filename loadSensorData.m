@@ -1,4 +1,4 @@
-function [ accelData, gyroData ] = loadSensorData( dataDir, ext, filter )
+function [ accelData, gyroData ] = loadSensorData(dataDir, ext, filter)
 %LOADSENSORDATA Loads raw accel/gyro data stream
 %   
 %   dataDir: specifies in which directory the data files are located,
