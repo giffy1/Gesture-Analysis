@@ -26,8 +26,8 @@ function [ features ] = computeFeatures( window )
         maxAccelerationToMax = zeros(3,1);
         medianAccelerationToMax = zeros(3,1);
         for i=1:3,
-            nPositionPeaks(i) = length(findpeaks(linearPosition(:,i),'MinPeakDistance',80)) ...
-                + length(findpeaks(-linearPosition(:,i), 'MinPeakDistance',80));
+            nPositionPeaks(i) = length(findpeaks(linearPosition(:,i),'MinPeakDistance',20)) ...
+                + length(findpeaks(-linearPosition(:,i), 'MinPeakDistance',20));
             
             avgAccelerationToMax(i) = mean(linearAcceleration(1:maxIndex(i),i));
             maxAccelerationToMax(i) = max(linearAcceleration(1:maxIndex(i),i));
@@ -37,6 +37,7 @@ function [ features ] = computeFeatures( window )
         %GYROSCOPE FEATURES
         angularVelocity = window(:,4:end); %gyroscope rate
         angularRotation = cumsum(angularVelocity,1);
+        %angularRotation = angularRotation - mean(angularRotation);
         nPeaks = zeros(3,1);    
         [maxAngularRotation, maxIndex] = max(angularRotation);
         [minAngularRotation, ~] = min(angularRotation);
@@ -44,8 +45,8 @@ function [ features ] = computeFeatures( window )
         maxAngularVelocityToMax = zeros(3,1);
         medianAngularVelocityToMax = zeros(3,1);
         for i=1:3,
-            nPeaks(i) = length(findpeaks(angularRotation(:,i),'MinPeakDistance',80)) ...
-                + length(findpeaks(-angularRotation(:,i), 'MinPeakDistance',80));
+            nPeaks(i) = length(findpeaks(angularRotation(:,i),'MinPeakDistance',20)) ...
+                + length(findpeaks(-angularRotation(:,i), 'MinPeakDistance',20));
             
             avgAngularVelocityToMax(i) = mean(angularVelocity(1:maxIndex(i),i));
             maxAngularVelocityToMax(i) = max(angularVelocity(1:maxIndex(i),i));

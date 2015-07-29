@@ -1,0 +1,64 @@
+% VISUALIZEGESTURES: This script plots the labelled motion data stream, 
+% such that each labelled gesture is given a unique distinguishable color.
+% The data is loaded from the ACCEL.csv and GYRO.csv files and the session
+% labels are loaded from the REPORT.csv file, located in the motion-data
+% directory. The gesture labels are loaded from a labels.txt file, located
+% in the same directory. The data is resampled and processed using an 
+% exponentially weighted moving average.
+%
+% See also VISUALIZESESSIONS, PLOTDATA, DISTINGUISHABLE_COLORS,
+% LOADSENSORDATA, LOADSESSIONLABELS, PREPROCESSDATA
+
+%% -------- GLOBAL VARIABLES -------- %%
+
+    %file name
+    DIRECTORY = 'motion-data-train';
+    
+    %indicates whether to display all axes or the given axis (X, Y, or Z)
+    DISPLAY_AXES = AxesConstants.ALL;
+    
+    %color which is reserved for signals with no labelled gestures
+    NO_ACTIVITY_COLOR = [0.5 0.5 0.5];
+    
+    %indicates which data set we are interested in
+    DATA_INDEX = 1;
+    
+    interval = 20*10^6;
+    
+    %% -------- LOAD FILES -------- %%
+    
+    %data directory
+    dataDir = fullfile('..',DIRECTORY);
+     
+    motionData = loadSensorData(dataDir, DATA_INDEX);
+    
+    %% -------- GET SESSION LABELS -------- %%
+    
+    sessions = loadSessionLabels(dataDir, DATA_INDEX);
+    
+    %% -------- SHIFT TIMESTAMPS -------- %%
+    
+    %gesture labels assume that sensor data starts at 0 and is in
+    %nanoseconds, so shift the sensor data so that it starts at 0
+    SHIFT = min(motionData.accelerometer(1,1), motionData.gyroscope(1,1)); %starting time (min time b/w gyro/accel data files)
+    motionData.accelerometer(:,1) = motionData.accelerometer(:,1) - SHIFT;
+    motionData.gyroscope(:,1) = motionData.gyroscope(:,1) - SHIFT;
+    sessions.start = sessions.start - SHIFT;
+    sessions.end = sessions.end - SHIFT;
+
+    %% -------- GET GESTURE LABELS -------- %%
+    
+    gestures = loadGestureLabels(dataDir, DATA_INDEX);
+    gestures.labels = cell(gestures.size, 1);
+    
+    repmat(gestures.start, sessions.size)
+    
+    
+    %% -------- PRE-PROCESSING -------- %%
+    
+    preprocessedData = preprocessData(accelData, gyroData, interval, 0.05);
+    
+    %% -------- PLOT DATA -------- %%
+    
+    plotData(preprocessedData(:,1:4), S, E, cellstr(gestureLabels), NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Pre-processed Accelerometer Signal');
+    plotData(preprocessedData(:,[1,5:end]), S, E, cellstr(gestureLabels), NO_ACTIVITY_COLOR, DISPLAY_AXES, 'SameScale', 'Pre-processed Gyroscope Signal');

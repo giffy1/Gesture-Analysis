@@ -1,4 +1,5 @@
-function [ X, Y ] = extractFeaturesOverMultiscaleWindows(timeSeriesData, windowDuration, windowStep, featureFunction, nFeatures, overlap_threshold, S, E, labels, otherLabel)
+function [ X, Y ] = extractFeaturesOverMultiscaleWindows(timeSeriesData, windowDuration, ... 
+    windowStep, featureFunction, nFeatures, overlap_threshold, S, E, labels, otherLabel)
 %EXTRACTFEATURESOVERMULTISCALEWINDOWS Extract features over a sliding window over time-series data
 %
 %   timeSeriesData: dataset where the first column specifies some temporal
@@ -42,36 +43,28 @@ function [ X, Y ] = extractFeaturesOverMultiscaleWindows(timeSeriesData, windowD
     upperBound = timeSeriesData(end,1);
     
     nWindows = ceil((upperBound - max(windowDuration))/windowStep);
-    X = zeros(nFeatures, nWindows);
+    X = zeros(nFeatures*length(windowDuration), nWindows);
     Y = cell(nWindows, 1);
     
     windowIndex = 1;
     
     while windowIndex <= nWindows
-        if nargin == 10,
-            %find closest matching start time
-            diffS = abs(S-startTime);
-            [~, minIdx] = min(diffS);
-            
-            labelStart = S(minIdx);
-            labelEnd = E(minIdx);
-            
-            isGesture = false;
-        end
+        if nargin == 10, isGesture = false; end
         for j = 1:length(windowDuration),
             window = timeSeriesData(timeSeriesData(:,1) >= startTime ... 
                 & timeSeriesData(:,1) <= endTime(j), 2:end);
 
-            %extract basic features to start:
-
-            X(:,windowIndex) = featureFunction(window);
+            X(nFeatures*(j-1)+1:nFeatures*j,windowIndex) = featureFunction(window);
 
             if nargin == 10 && isGesture == false,
-                overlap = (min(labelEnd, endTime(j)) - max(labelStart, startTime)) / (labelEnd - labelStart);
-                if overlap < 0, overlap = 0; end
+                %overlap = (min(labelEnd, endTime(j)) - max(labelStart, startTime)) / (labelEnd - labelStart); %(endTime(j) - startTime); %(labelEnd - labelStart);
+                diff = (min(endTime(end),E)-max(startTime,S))./(E-S); %percentage of each ground truth in window
+                diff(diff < 0) = 0;
+                overlap = sum(diff);
+                
                 if overlap >= overlap_threshold
                     isGesture = true;
-                    Y{windowIndex} = labels{minIdx};
+                    Y{windowIndex} = labels{find(diff,1)};
                 else
                     Y{windowIndex} = otherLabel;
                 end

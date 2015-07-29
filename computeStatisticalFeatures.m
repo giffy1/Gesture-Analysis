@@ -9,7 +9,8 @@ function [ features ] = computeStatisticalFeatures( window )
         windowSkew = skewness(window,1);
         windowKurtosis = kurtosis(window);
         windowRMS = rms(window,1);
+        ZCR=mean(abs(diff(sign(window))));
 
-        features = [windowMean'; windowStd'; windowSkew'; windowKurtosis'; windowRMS'];
+        features = [windowMean'; windowStd'; windowSkew'; windowKurtosis'; windowRMS'; ZCR'];
 end
 

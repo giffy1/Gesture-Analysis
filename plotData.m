@@ -1,4 +1,4 @@
-function [H, colorSet] = plotData( dataStream, startLabels, endLabels, labels, no_activity_color, axisOptions, sameScale, window_title )
+function [H, colorSet, fig] = plotData( dataStream, startLabels, endLabels, labels, no_activity_color, axisOptions, sameScale, window_title )
 %PLOTDATA Plots raw multi-axis session-labelled (or gesture-labelled) 
 %data (i.e. accel/gyro) 
 %
@@ -48,7 +48,7 @@ function [H, colorSet] = plotData( dataStream, startLabels, endLabels, labels, n
 
 %% -------- PLOT DATA -------- %%
     ax = zeros(3,1);
-    figure('name', window_title); 
+    fig=figure('name', window_title); 
     for i=axis1:axis1+nAxes-1, %for each axis
         ax(i)=subplot(nAxes,1,i-axis1+1);
         H(1) = plot(dataStream(:,1), dataStream(:,i+1), 'Color', no_activity_color);
@@ -66,7 +66,9 @@ function [H, colorSet] = plotData( dataStream, startLabels, endLabels, labels, n
             color = colorSet(index,:);
             
             session = dataStream(dataStream(:,1) >= startLabels(k) & dataStream(:,1) <= endLabels(k), :);
-            H(index+1) = plot(session(:,1), session(:,i+1), 'Color', color);
+            if ~isempty(session),
+                H(index+1) = plot(session(:,1), session(:,i+1), 'Color', color);
+            end
         end
         hold off;
     end
@@ -85,7 +87,8 @@ function [H, colorSet] = plotData( dataStream, startLabels, endLabels, labels, n
         set(ax, 'YLim', [min(allYLim), max(allYLim)]);
     end
     
-    legend(H, [{'none'}; uniqueLabels]);
+    %legend(H, [{'none'}; uniqueLabels]); %ignore legend just for now (when
+    %plotting misclassified windows, it causes an error I couldn't fix...)
     hold off;
 
 end

@@ -1,4 +1,4 @@
-function [ start_times, end_times, N] = loadGestureLabels(dataDir, filename)
+function [ gestures ] = loadGestureLabels(dataDir, identifier)
 %LOADGESTURELABELS Loads the session labels of the gesture stream
 %
 %   dataDir: specifies in which directory the data files are located
@@ -15,8 +15,12 @@ function [ start_times, end_times, N] = loadGestureLabels(dataDir, filename)
 %   the length of start_times and end_times.
 %
 %   See also LOADSESSIONLABELS, LOADSENSORDATA
-    
-    fName = fullfile(dataDir, filename);
+        
+    ext = '.txt';
+    file = ['labels' num2str(identifier) ext];
+    fName = fullfile(dataDir, file);
+    disp(['Reading gesture labels from ' file '...']);
+    tic
 
     FID = fopen(fName);
     labelsContent = textscan(FID,'%s','Delimiter','\n');
@@ -43,4 +47,7 @@ function [ start_times, end_times, N] = loadGestureLabels(dataDir, filename)
     %are in nanoseconds)
     start_times = (start_times + video_start - sensor_start)*10^6;
     end_times = (end_times + video_start - sensor_start)*10^6;
+    
+    gestures = struct('video_start', video_start, 'sensor_start', sensor_start, 'size', N, 'start', start_times, 'end', end_times);
+    toc
 end

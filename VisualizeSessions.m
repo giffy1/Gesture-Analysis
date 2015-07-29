@@ -11,7 +11,7 @@
 %% -------- GLOBAL VARIABLES -------- %%
 
     %file name
-    DIRECTORY = 'motion-data-train';
+    DIRECTORY = 'motion-data-test';
     
     %file extension
     EXTENSION = '*.csv';
@@ -22,18 +22,18 @@
     %color which is reserved for signals with no labelled gestures
     NO_ACTIVITY_COLOR = [0.5 0.5 0.5];
     
-    interval = 15*10^6;
+    interval = 20*10^6;
     
     %% -------- LOAD DATA -------- %%
     
     %data directory
     dataDir = fullfile('..',DIRECTORY);
     
-    [accelData, gyroData] = loadSensorData(dataDir, EXTENSION, 4);
+    [accelData, gyroData] = loadSensorData(dataDir, EXTENSION, 1);
     
     %% -------- GET SESSION LABELS -------- %%
     
-    [sessionStart, sessionEnd, labels] = loadSessionLabels(dataDir, EXTENSION, 4);
+    [sessionStart, sessionEnd, labels] = loadSessionLabels(dataDir, EXTENSION, 1);
     
     %% -------- SHIFT TIMESTAMPS -------- %%
     
